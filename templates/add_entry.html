@@ -44,21 +44,21 @@
                     </div>
                     <div class="mb-3">
                         {{ form.exercise.label(class="form-label") }}
-                        {{ form.exercise(class="form-control") }}
+                        {{ form.exercise(class="form-control", placeholder="e.g., 30 min running, yoga, etc.") }}
                         {% for error in form.exercise.errors %}
                         <span class="text-danger">{{ error }}</span>
                         {% endfor %}
                     </div>
                     <div class="mb-3">
                         {{ form.diet.label(class="form-label") }}
-                        {{ form.diet(class="form-control", rows=3) }}
+                        {{ form.diet(class="form-control", rows=3, placeholder="What did you eat today?") }}
                         {% for error in form.diet.errors %}
                         <span class="text-danger">{{ error }}</span>
                         {% endfor %}
                     </div>
                     <div class="mb-3">
                         {{ form.notes.label(class="form-label") }}
-                        {{ form.notes(class="form-control", rows=3) }}
+                        {{ form.notes(class="form-control", rows=3, placeholder="Any additional notes about your day...") }}
                         {% for error in form.notes.errors %}
                         <span class="text-danger">{{ error }}</span>
                         {% endfor %}
@@ -67,6 +67,9 @@
                         {{ form.submit(class="btn btn-primary") }}
                     </div>
                 </form>
+                <div class="text-center mt-3">
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-secondary">Back to Dashboard</a>
+                </div>
             </div>
         </div>
     </div>

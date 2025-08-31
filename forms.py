@@ -2,7 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, IntegerField, FloatField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, NumberRange
 from wtforms.fields import DateField
-from datetime import datetime
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -17,7 +16,7 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
 class HealthEntryForm(FlaskForm):
-    date = DateField('Date', validators=[DataRequired()], default=datetime.utcnow)
+    date = DateField('Date', validators=[DataRequired()], default=lambda: datetime.utcnow().date())
     exercise = StringField('Exercise', validators=[Length(max=200)])
     diet = TextAreaField('Diet', validators=[Length(max=500)])
     mood = SelectField('Mood (1-10)', choices=[(i, str(i)) for i in range(1, 11)], 

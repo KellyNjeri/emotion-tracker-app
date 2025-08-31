@@ -11,7 +11,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('index') }}">Health & Wellness Tracker</a>
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">Health & Wellness Tracker</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -19,13 +19,13 @@
                 <ul class="navbar-nav me-auto">
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                        <a class="nav-link" href="{{ url_for('main.dashboard') }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('add_entry') }}">Add Entry</a>
+                        <a class="nav-link" href="{{ url_for('main.add_entry') }}">Add Entry</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('entries') }}">My Entries</a>
+                        <a class="nav-link" href="{{ url_for('main.entries') }}">My Entries</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -35,14 +35,14 @@
                         <span class="navbar-text me-3">Hello, {{ current_user.username }}</span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                        <a class="nav-link" href="{{ url_for('main.logout') }}">Logout</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                        <a class="nav-link" href="{{ url_for('main.login') }}">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                        <a class="nav-link" href="{{ url_for('main.register') }}">Register</a>
                     </li>
                     {% endif %}
                 </ul>

@@ -1,43 +1,40 @@
-from flask import render_template, redirect, url_for, flash, request, jsonify, abort
+from flask import render_template, redirect, url_for, flash, request, jsonify, abort, Blueprint
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import datetime, timedelta
 import json
-from app import app, db
-from models import User, HealthEntry
+from models import User, HealthEntry, db
 from forms import LoginForm, RegistrationForm, HealthEntryForm
 
-# Health check endpoint for Render
-@app.route('/healthz')
-def health_check():
-    return jsonify({"status": "healthy", "message": "Service is running"}), 200
+# Create a blueprint
+main = Blueprint('main', __name__)
 
-@app.route('/')
+@main.route('/')
 def index():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('main.dashboard'))
     return render_template('index.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('main.dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
-            return redirect(url_for('login'))
+            return redirect(url_for('main.login'))
         login_user(user)
         next_page = request.args.get('next')
         if not next_page or not next_page.startswith('/'):
-            next_page = url_for('dashboard')
+            next_page = url_for('main.dashboard')
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
-@app.route('/register', methods=['GET', 'POST'])
+@main.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('main.dashboard'))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
@@ -45,15 +42,15 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
-        return redirect(url_for('login'))
+        return redirect(url_for('main.login'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route('/logout')
+@main.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))
 
-@app.route('/dashboard')
+@main.route('/dashboard')
 @login_required
 def dashboard():
     end_date = datetime.utcnow().date()
@@ -78,7 +75,7 @@ def dashboard():
                           sleep_data=json.dumps(sleep_data),
                           health_tip=health_tip)
 
-@app.route('/add_entry', methods=['GET', 'POST'])
+@main.route('/add_entry', methods=['GET', 'POST'])
 @login_required
 def add_entry():
     form = HealthEntryForm()
@@ -96,10 +93,10 @@ def add_entry():
         db.session.add(entry)
         db.session.commit()
         flash('Your health entry has been saved!')
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('main.dashboard'))
     return render_template('add_entry.html', title='Add Entry', form=form)
 
-@app.route('/entries')
+@main.route('/entries')
 @login_required
 def entries():
     page = request.args.get('page', 1, type=int)
@@ -108,7 +105,7 @@ def entries():
         .paginate(page=page, per_page=10)
     return render_template('entries.html', title='Entries', entries=entries)
 
-@app.route('/edit_entry/<int:entry_id>', methods=['GET', 'POST'])
+@main.route('/edit_entry/<int:entry_id>', methods=['GET', 'POST'])
 @login_required
 def edit_entry(entry_id):
     entry = HealthEntry.query.get_or_404(entry_id)
@@ -119,10 +116,10 @@ def edit_entry(entry_id):
         form.populate_obj(entry)
         db.session.commit()
         flash('Your changes have been saved.')
-        return redirect(url_for('entries'))
+        return redirect(url_for('main.entries'))
     return render_template('add_entry.html', title='Edit Entry', form=form)
 
-@app.route('/delete_entry/<int:entry_id>', methods=['POST'])
+@main.route('/delete_entry/<int:entry_id>', methods=['POST'])
 @login_required
 def delete_entry(entry_id):
     entry = HealthEntry.query.get_or_404(entry_id)
@@ -131,9 +128,9 @@ def delete_entry(entry_id):
     db.session.delete(entry)
     db.session.commit()
     flash('Your entry has been deleted.')
-    return redirect(url_for('entries'))
+    return redirect(url_for('main.entries'))
 
-@app.route('/api/entries')
+@main.route('/api/entries')
 @login_required
 def api_entries():
     entries = HealthEntry.query.filter_by(user_id=current_user.id).all()
@@ -147,6 +144,10 @@ def api_entries():
         'sleep_hours': entry.sleep_hours,
         'notes': entry.notes
     } for entry in entries])
+
+@main.route('/healthz')
+def health_check():
+    return {"status": "healthy", "message": "Service is running"}, 200
 
 def generate_health_tip(entries):
     if not entries:
