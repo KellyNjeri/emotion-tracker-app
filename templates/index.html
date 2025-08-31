@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row align-items-center">
+    <div class="col-md-6">
+        <h1 class="display-4">Track Your Health & Wellness</h1>
+        <p class="lead">Monitor your daily health habits, visualize your progress, and receive personalized health tips to support your well-being journey.</p>
+        <p>This application supports UN Sustainable Development Goal 3: Good Health and Well-Being.</p>
+        <div class="mt-4">
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg me-2">Get Started</a>
+            <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">Login</a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Health Tracking" class="img-fluid rounded">
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">Track Daily Habits</h5>
+                <p class="card-text">Log your exercise, diet, mood, water intake, and sleep patterns.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">Visualize Progress</h5>
+                <p class="card-text">See your health trends over time with interactive charts and graphs.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">Get Health Tips</h5>
+                <p class="card-text">Receive personalized recommendations to improve your well-being.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
