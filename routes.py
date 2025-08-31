@@ -6,6 +6,11 @@ from app import app, db
 from models import User, HealthEntry
 from forms import LoginForm, RegistrationForm, HealthEntryForm
 
+# Health check endpoint for Render
+@app.route('/healthz')
+def health_check():
+    return jsonify({"status": "healthy", "message": "Service is running"}), 200
+
 @app.route('/')
 def index():
     if current_user.is_authenticated:
