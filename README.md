@@ -38,4 +38,4 @@ This app is configured for easy deployment to Render.com. Connect your GitHub re
 
 ## License
 
-This project is created for educational purposes as part of a hackathon.
+This project is created for educational purposes.
