@@ -1,8 +1,9 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime, date
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
+# Initialize db ONCE
 db = SQLAlchemy()
 
 class User(UserMixin, db.Model):
@@ -21,7 +22,7 @@ class User(UserMixin, db.Model):
 
 class HealthEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date, nullable=False, default=datetime.utcnow)
+    date = db.Column(db.Date, nullable=False, default=date.today)
     exercise = db.Column(db.String(200))
     diet = db.Column(db.String(500))
     mood = db.Column(db.Integer)
